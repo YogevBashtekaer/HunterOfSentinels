@@ -9,6 +9,7 @@ public class Player extends Rectangle{
     private boolean canShoot;
     private boolean canUseStormAttack;
     private int currentShootWaitTime;
+    private int health;;
 
 
     final static int PLAYER_X = Utils.WINDOW_WIDTH/2;
@@ -16,13 +17,16 @@ public class Player extends Rectangle{
     final static int PLAYER_SPEED = 25;
     final static int PLAYER_LAZER_SPEED = -10;
 
+    final static int MAX_HEALTH = 3;
+    public static final int PLAYER_DEAD = 0;
+
     final static int SHOOT_WAIT_TIME_LEVEL_1 = 1000;
-    final static int SHOOT_WAIT_TIME_LEVEL_2 = 750;
+    final static int SHOOT_WAIT_TIME_LEVEL_2 = 150;
 
     final static String BLACK_BIRD_PHOTO_PATH = "/Photos/black_bird.png";
     final static String BLACK_BIRD_LAZER_PHOTO_PATH = "/Photos/black_bird_lazer.png";
     final static String BLACK_BIRD_SHOOTING_PHOTO_PATH = "/Photos/black_bird_shooting.png";
-    final static String TEST_PHOTO_PATH = "/Photos/result.png";
+    final static String BLACK_BIRD_BLAST_PHOTO_PATH = "/Photos/black_bird_blast.png";
 
 
 
@@ -30,7 +34,8 @@ public class Player extends Rectangle{
     public Player() {
         this.isShooting = false;
         this.canShoot = true;
-        this.currentShootWaitTime = SHOOT_WAIT_TIME_LEVEL_1;
+        this.health = MAX_HEALTH;
+        this.currentShootWaitTime = SHOOT_WAIT_TIME_LEVEL_2;
         this.canUseStormAttack = true;
         this.x = PLAYER_X;
         this.y = PLAYER_Y;
@@ -38,7 +43,6 @@ public class Player extends Rectangle{
         if (image == null){
             System.out.println("Error loading player image");
         }
-
         this.height = this.image.getHeight(null);
         this.width = this.image.getWidth(null);
     }
@@ -46,6 +50,17 @@ public class Player extends Rectangle{
     public void paint(Graphics g){
         g.fillRect(this.x,this.y,this.width,this.height);
         g.drawImage(this.image,this.x,this.y,this.width,this.height,null);
+    }
+
+    public void reset(){
+        this.isShooting = false;
+        this.canShoot = true;
+        this.health = MAX_HEALTH;
+        this.currentShootWaitTime = SHOOT_WAIT_TIME_LEVEL_2;
+        this.canUseStormAttack = true;
+        this.x = PLAYER_X;
+        this.y = PLAYER_Y;
+        this.image = new ImageIcon(getClass().getResource(BLACK_BIRD_PHOTO_PATH)).getImage();
     }
 
     public void updateShootWaitTime(){
@@ -80,6 +95,7 @@ public class Player extends Rectangle{
         return canShoot;
     }
 
+
     public void moveRight(){
         this.x += PLAYER_SPEED;
         System.out.println("move right");
@@ -92,12 +108,38 @@ public class Player extends Rectangle{
         if (!canShoot)return null;
 
         this.isShooting = true;
-        new Thread(()->{
+        new Thread(() -> {
+
+            // שומרים את התחתית
+            int bottomY = this.y + this.height;
+
+            // מחליפים תמונה
             this.image = new ImageIcon(getClass().getResource(BLACK_BIRD_SHOOTING_PHOTO_PATH)).getImage();
+
+            // מעדכנים גודל
+            this.width = this.image.getWidth(null);
+            this.height = this.image.getHeight(null);
+
+            // מחזירים למיקום נכון (לפי תחתית)
+            this.y = bottomY - this.height;
+
             Utils.sleep(ATTACK_ANIMATION_TIME);
+
+            // שוב שומרים תחתית
+            bottomY = this.y + this.height;
+
+            // חזרה לתמונה רגילה
             this.image = new ImageIcon(getClass().getResource(BLACK_BIRD_PHOTO_PATH)).getImage();
+
+            this.width = this.image.getWidth(null);
+            this.height = this.image.getHeight(null);
+
+            // מחזירים למיקום
+            this.y = bottomY - this.height;
+
             this.isShooting = false;
             this.canShoot = false;
+
         }).start();
 
         int attackHeight = new ImageIcon(getClass().getResource(BLACK_BIRD_LAZER_PHOTO_PATH)).getImage().getHeight(null);
@@ -113,5 +155,32 @@ public class Player extends Rectangle{
         }).start();
 
         return attack;
+    }
+
+    public void addHealth(){
+        if (this.health < MAX_HEALTH){
+            this.health++;
+        }
+    }
+
+    public void loseHealth(){
+            this.health--;
+        new Thread(()->{
+            this.image = new ImageIcon(getClass().getResource(BLACK_BIRD_BLAST_PHOTO_PATH)).getImage();
+            Utils.sleep(ATTACK_ANIMATION_TIME);
+            this.image = new ImageIcon(getClass().getResource(BLACK_BIRD_PHOTO_PATH)).getImage();
+        }).start();
+        if (!isAlive()) {
+            System.out.println("Player is dead!");
+        }
+
+    }
+
+    public boolean isAlive() {
+        return this.health > PLAYER_DEAD;
+    }
+
+    public int getHealth() {
+        return health;
     }
 }

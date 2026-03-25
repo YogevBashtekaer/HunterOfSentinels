@@ -8,9 +8,10 @@ public class InstructionsPanel extends JPanel {
 
     private static final int BACK_BUTTON_WIDTH = 120;
     private static final int BACK_BUTTON_HEIGHT = 30;
-    private static final int BACK_BUTTON_Y = 150;
+    private static final int BACK_BUTTON_Y = 700;
+
     public InstructionsPanel(Window parentWindow) {
-        this.setBackground(Color.green);
+        this.setBackground(Color.black);
         this.setLayout(null);
 
         this.backToMenuButton = new JButton("Back to menu");
@@ -18,5 +19,33 @@ public class InstructionsPanel extends JPanel {
         backToMenuButton.setBounds(buttonX, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
         this.backToMenuButton.addActionListener(e -> parentWindow.switchToMenuPanel());
         this.add(backToMenuButton);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.white);
+        g.setFont(new Font("Verdana", Font.BOLD, 20));
+        String[] instructions = {
+                "You are in Black Bird",
+                "Fight enemies and bosses",
+                "Dodge attacks and defeat them",
+                "Start with 3 lives and 1 special attack",
+                "If you use the special attack or lose lives, enemies may drop items",
+                "Controls:",
+                "Move Right: RIGHT ARROW or D",
+                "Move Left: LEFT ARROW or A",
+                "Diagonal Shoot Left: Q",
+                "Diagonal Shoot Right: E",
+                "Storm Attack: S",
+                "Shoot: SPACE"
+        };
+        int y = 50;
+        for (String line : instructions) {
+            int textWidth = g.getFontMetrics().stringWidth(line);
+            int x = (Utils.WINDOW_WIDTH - textWidth) / 2;
+            g.drawString(line, x, y);
+            y += 40;
+        }
     }
 }

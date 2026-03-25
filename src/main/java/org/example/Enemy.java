@@ -15,9 +15,10 @@ public abstract class Enemy extends Rectangle {
     protected int targetX;
     protected int targetY;
     protected boolean entering;
+    protected boolean canAttack;
 
     final static int LIGHTNING_DAMAGE = 20;
-    public Enemy(int targetX, int targetY, EnemyType enemyType) {
+    public Enemy(int targetX, int targetY) {
         this.x = targetX;
         this.y = -250;
 
@@ -25,13 +26,15 @@ public abstract class Enemy extends Rectangle {
         this.targetY = targetY;
         this.entering = true;
 
-        this.enemyType = enemyType;
+        this.canAttack = false;
+
         this.hitByLightning = false;
     }
     public void moveToTarget(){
         this.y += 1;
         if (this.y >= this.targetY){
             this.entering = false;
+            this.canAttack = true;
         }
     }
 
@@ -47,15 +50,24 @@ public abstract class Enemy extends Rectangle {
     public abstract Attack attack();
     public void takeDamage(int damage) {
         health -= damage;
+        System.out.println("enemy take damage: "+ damage +" ,enemy hp: "+this.health);
     }
 
     public boolean isDead() {
+        if(this.health <= 0) {
+            System.out.println("enemy: " + this.enemyType.toString()+" is dead");
+        }
         return this.health <= 0;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
     }
 
     public void hitByLightning() {
             hitByLightning = true;
             health -= LIGHTNING_DAMAGE;
+            System.out.println("enemy hit by lightning, hp: "+this.health);
             this.image = new ImageIcon(getClass().getResource(this.lightningHitImagePath)).getImage();
 
             new Thread(() -> {

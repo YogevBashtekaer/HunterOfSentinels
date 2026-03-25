@@ -7,7 +7,7 @@ public class Window extends JFrame {
     private JPanel mainPanel;
     private CardLayout cardLayout;
     private Music music;
-
+    private GamePanel gamePanel;
 
     public Window() throws HeadlessException {
         this.setTitle(" Hunter Of Sentinels");
@@ -37,9 +37,18 @@ public class Window extends JFrame {
     }
 
     public void switchToGamePanel(){
+        if (this.gamePanel != null) {
+            this.gamePanel.gameOver();
+            mainPanel.remove(this.gamePanel);
+        }
+
+        this.gamePanel = new GamePanel(this);
+        mainPanel.add(this.gamePanel,"game");
+
         cardLayout.show(mainPanel,"game");
-        mainPanel.getComponent(1).requestFocusInWindow();
-        changeMusic(Utils.LEVEL_1_MUSIC_PATH);
+
+        gamePanel.requestFocusInWindow();
+        gamePanel.startGame();
     }
 
     public void switchToMenuPanel(){
