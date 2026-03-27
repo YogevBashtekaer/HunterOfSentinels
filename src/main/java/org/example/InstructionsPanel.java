@@ -43,7 +43,9 @@ public class InstructionsPanel extends JPanel {
                 "Diagonal Shoot Left: Q",
                 "Diagonal Shoot Right: E",
                 "Storm Attack: S",
-                "Shoot: SPACE"
+                "Shoot: SPACE",
+                "Pause Game: P",
+                "Toggle Music: M"
         };
         int y = 50;
         for (String line : instructions) {

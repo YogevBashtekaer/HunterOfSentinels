@@ -20,6 +20,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private List<Enemy> enemies;
     private List<Cloud> clouds;
     private List<PowerUp> powerUps;
+    private boolean musicOn;
+    private boolean paused;
+    private boolean stormAttackActive;
 
     private JLabel gameOverLabel;
     private JButton restartButton;
@@ -30,7 +33,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private BasicLevel currentLevel;
     private String screenMessage;
 
-    private boolean stormAttackActive;
     private static final int LEFT_BOUND = 10;
     private static final int RIGHT_BOUND = Utils.WINDOW_WIDTH- 100;
     private final static int TIMER_DELAY = 16;
@@ -62,6 +64,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         this.stormAttackActive = false;
         this.gameLevel = GameLevel.INTRO;
         powerUps = new ArrayList<>();
+        this.musicOn = true;
+        this.paused = false;
 
         this.hpLogo = new ImageIcon(getClass().getResource(HP_LOGO_PATH)).getImage();
         this.stormAttackLogo = new ImageIcon(getClass().getResource(STORM_ATTACK_LOGO_PATH)).getImage();
@@ -115,7 +119,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void gameOver(){
         this.gameTimer.stop();
-        this.parentWindow.changeMusic(Utils.GAME_OVER_MUSIC_PATH);
+        if(this.musicOn) {
+            this.parentWindow.changeMusic(Utils.GAME_OVER_MUSIC_PATH);
+        }
         this.gameOverLabel.setVisible(true);
         this.menuButton.setVisible(true);
         this.restartButton.setVisible(true);
@@ -126,6 +132,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         this.enemyAttacks.clear();
         this.enemies.clear();
         this.clouds.clear();
+        this.powerUps.clear();
         makeClouds();
 
 
@@ -140,7 +147,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         this.restartButton.setVisible(false);
 
         this.gameTimer.start();
-        parentWindow.changeMusic(Utils.LEVEL_1_MUSIC_PATH);
+        if(this.musicOn) {
+            parentWindow.changeMusic(Utils.LEVEL_1_MUSIC_PATH);
+        }
     }
 
     protected void paintComponent(Graphics g){
@@ -185,6 +194,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             int y = Utils.WINDOW_HEIGHT / 2;
             g2.setColor(Color.RED);
             g2.drawString(this.screenMessage, x, y);
+        }
+
+        if (paused) {
+            Graphics2D g2 = (Graphics2D) g;
+            Font pauseFont = new Font("Verdana", Font.BOLD, 48);
+            g2.setFont(pauseFont);
+            String pauseText = "PAUSED";
+            int textWidth = g2.getFontMetrics().stringWidth(pauseText);
+            int x = (Utils.WINDOW_WIDTH - textWidth) / 2;
+            int y = Utils.WINDOW_HEIGHT / 2;
+            g2.setColor(Color.YELLOW);
+            g2.drawString(pauseText, x, y);
         }
     }
 
@@ -239,6 +260,25 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 }
                 tryShoot();
                 break;
+            case KeyEvent.VK_M:
+                if (musicOn) {
+                    parentWindow.stopMusic();
+                    musicOn = false;
+                } else {
+                    parentWindow.changeMusic(this.currentLevel.getMusicPath());
+                    musicOn = true;
+                }
+                break;
+            case KeyEvent.VK_P:
+                paused = !paused;
+                if (paused) {
+                    gameTimer.stop();
+                } else {
+                    gameTimer.start();
+                    screenMessage = null;
+                }
+                repaint();
+                break;
         }
     }
 
@@ -280,37 +320,43 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 showMessage("ENEMY DETECTED!");
                 this.gameLevel = GameLevel.LEVEL_2;
                 this.currentLevel = new Level2();
-                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                playMusic();
                 this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
                 break;
             case LEVEL_2:
                 showMessage("WARNING: INCOMING FIRE!");
                 this.gameLevel = GameLevel.LEVEL_3;
                 this.currentLevel = new Level3();
-                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                playMusic();
                 this.enemyAttacks = ((DodgingLevel)this.currentLevel).getAttacks();
                 break;
             case LEVEL_3:
                 showMessage("NIMROD HAS ARRIVED!");
                 this.gameLevel = GameLevel.LEVEL_4;
                 this.currentLevel = new Level4();
-                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                playMusic();
                 this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
                 break;
             case LEVEL_4:
                 showMessage("MASTERMOLD DETECTED!");
                 this.gameLevel = GameLevel.LEVEL_5;
                 this.currentLevel = new Level5();
-                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                playMusic();
                 this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
                 break;
             case LEVEL_5:
                 showMessage("They Just Keep Coming!");
                 this.gameLevel = GameLevel.ENDLESS_LEVEL;
                 this.currentLevel = new EndlessLevel();
-                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                playMusic();
                 this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
                 break;
+        }
+    }
+
+    private void playMusic(){
+        if(this.musicOn){
+            this.parentWindow.changeMusic(this.currentLevel.getMusicPath());
         }
     }
 

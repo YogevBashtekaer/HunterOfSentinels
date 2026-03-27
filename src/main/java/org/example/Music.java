@@ -30,11 +30,10 @@ public class Music {
     public  void play() {
         clip.start();
     }
-    public  void stop() throws IOException {
-        System.out.println("stop music");
-        sound.close();
-        clip.close();
-        clip.stop();
+    public void stop() {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+        }
     }
     public  void loadMusic(String path) {
         try {

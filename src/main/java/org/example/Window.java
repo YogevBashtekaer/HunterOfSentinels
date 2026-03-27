@@ -71,4 +71,11 @@ public class Window extends JFrame {
         this.music.loop();
     }
 
+    public void stopMusic(){
+        if(this.music != null){
+            System.out.println("enter stop music");
+            try { this.music.stop(); } catch (Exception e){ e.printStackTrace(); }
+        }
+    }
+
 }
