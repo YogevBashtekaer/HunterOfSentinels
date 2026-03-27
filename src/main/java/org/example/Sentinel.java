@@ -32,6 +32,7 @@ public class Sentinel extends Enemy{
         this.originalImagePath = SENTINEL_PHOTO_PATH;
         this.lightningHitImagePath = SENTINEL_HIT_BY_LIGHTNING_PATH;
     }
+
     private void randomVerticalMovement() {
 
         int choice = random.nextInt(3);

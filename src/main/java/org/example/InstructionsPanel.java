@@ -5,14 +5,18 @@ import java.awt.*;
 
 public class InstructionsPanel extends JPanel {
     private JButton backToMenuButton;
-
     private static final int BACK_BUTTON_WIDTH = 120;
     private static final int BACK_BUTTON_HEIGHT = 30;
     private static final int BACK_BUTTON_Y = 700;
 
+    private Image bgImage;
+    private static final String BG_IMAGE_PATH = "/Photos/instructions_bg.png";
+
     public InstructionsPanel(Window parentWindow) {
         this.setBackground(Color.black);
         this.setLayout(null);
+
+        this.bgImage = new ImageIcon(getClass().getResource(BG_IMAGE_PATH)).getImage();
 
         this.backToMenuButton = new JButton("Back to menu");
         int buttonX = (Utils.WINDOW_WIDTH - BACK_BUTTON_WIDTH) / 2;
@@ -24,6 +28,7 @@ public class InstructionsPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(this.bgImage, 0, 0, Utils.WINDOW_WIDTH, Utils.WINDOW_HEIGHT, null);
         g.setColor(Color.white);
         g.setFont(new Font("Verdana", Font.BOLD, 20));
         String[] instructions = {

@@ -304,6 +304,13 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 this.parentWindow.changeMusic(currentLevel.getMusicPath());
                 this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
                 break;
+            case LEVEL_5:
+                showMessage("They Just Keep Coming!");
+                this.gameLevel = GameLevel.ENDLESS_LEVEL;
+                this.currentLevel = new EndlessLevel();
+                this.parentWindow.changeMusic(currentLevel.getMusicPath());
+                this.enemies = ((EnemyLevel)currentLevel).getActiveEnemies();
+                break;
         }
     }
 

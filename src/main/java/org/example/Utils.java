@@ -14,6 +14,7 @@ public class Utils {
     final static String LEVEL_3_MUSIC_PATH = "/Music/Security_Alert.wav";
     final static String LEVEL_4_MUSIC_PATH = "/Music/Sentinels_Attack.wav";
     final static String LEVEL_5_MUSIC_PATH = "/Music/Final_Battle.wav";
+    final static String ENDLESS_LEVEL_MUSIC_PATH = "/Music/wolverine_and_the_x_men.wav";
     final static String MISSION_COMPLETE_MUSIC_PATH = "/Music/Mission_Complete.wav";
     final static String GAME_OVER_MUSIC_PATH = "/Music/Game_Over.wav";
 
