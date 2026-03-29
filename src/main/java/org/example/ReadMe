@@ -1,0 +1,148 @@
+# 🛩️ Hunter of Sentinels
+
+## 🎮 Game Description
+
+**Hunter of Sentinels** is a 2D arcade-style shooter inspired by classic games like *Chicken Invaders*.
+
+In this game, you control the iconic **Blackbird jet** of the X-Men, fighting against waves of enemies and powerful bosses from the X-Men universe.
+
+### 🧩 Gameplay Features
+
+* 🚀 Smooth player movement (left/right)
+* 🔫 Shooting system with cooldown mechanics
+* ⚡ Special ability: **Storm Attack** (lightning strike on enemies)
+* ❤️ Health system with visual indicators
+* 🎁 Power-ups:
+
+  * Health boost
+  * Storm attack recharge
+* ☁️ Animated background (moving clouds)
+* 🎵 Background music with toggle option
+* ⏸️ Pause system
+* 🔁 Restart & menu navigation
+
+---
+
+## 👾 Enemies
+
+### 🟣 Basic Enemy
+
+* **Sentinel**
+
+  * Moves horizontally with random vertical movement
+  * Can shoot projectiles
+  * Has a special **dive attack** targeting the player
+
+### 🔴 Bosses
+
+* **Nimrod**
+* **Master Mold**
+
+  * Spawns additional Sentinel enemies
+  * Acts as a high-level challenge
+
+---
+
+## 🧠 Game Mechanics
+
+* Collision detection using `Rectangle`
+* Enemy AI behavior (random shooting, diving attacks)
+* Wave-based level progression
+* Endless mode after final level
+* Power-up drop system based on probability
+
+---
+
+## 🗺️ Levels
+
+* Multiple levels with increasing difficulty
+* Each level introduces new mechanics:
+
+  * Enemy waves
+  * Dodging attacks
+  * Boss fights
+* Final stage transitions into **Endless Mode**
+
+---
+
+## 🛠️ Technologies Used
+
+* **Java**
+* **Java Swing** (GUI & rendering)
+* **AWT** (graphics, events, input handling)
+* **Object-Oriented Programming (OOP)**
+
+  * Inheritance (Enemy types, Levels)
+  * Polymorphism (different behaviors per enemy)
+* **Multithreading**
+
+  * Shooting cooldown
+  * Animations
+  * Timed messages
+* **Event-Driven Programming**
+
+  * Keyboard input (KeyListener)
+  * Game loop using `Timer`
+
+---
+
+## 🏗️ Architecture Highlights
+
+* Modular class design:
+
+  * `GamePanel` – main game loop and rendering
+  * `Player` – player logic & abilities
+  * `Enemy` (base class) → `Sentinel`, bosses
+  * `Level` system for progression
+* Separation of concerns between game logic and UI
+* Reusable components (attacks, power-ups, enemies)
+
+---
+
+## 🎯 Controls
+
+| Key    | Action       |
+| ------ | ------------ |
+| ⬅️ / A | Move Left    |
+| ➡️ / D | Move Right   |
+| SPACE  | Shoot        |
+| S      | Storm Attack |
+| Q / E  | Move + Shoot |
+| P      | Pause        |
+| M      | Toggle Music |
+
+---
+
+## 🚀 How to Run
+
+1. Clone the repository
+2. Open the project in IntelliJ / any Java IDE
+3. Run the `Main` class
+4. Enjoy the game 🎮
+
+---
+
+## 📌 Future Improvements
+
+* Add more enemy types
+* Boss unique abilities
+* Sound effects for actions
+* Score system & leaderboard
+* Better animations
+
+---
+
+## 👨‍💻 Author
+
+Developed by **Yogev**
+
+---
+
+## 💡 Notes
+
+This project was built as part of a portfolio to demonstrate:
+
+* Game development fundamentals
+* Object-oriented design
+* Real-time event handling
+* Clean and scalable architecture
